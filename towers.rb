@@ -46,6 +46,14 @@ class TowerOfHanoi
 	def render 
 		lineWidth = 60
 		#assign and update variables for each row
+			#create an array from -1 to -@stack1.length
+			#iterate through each value of the array, passing each value as an index to @stack1
+			#add the item at that index to an array
+			#pring (via positive indexes) to strings 
+
+
+			#scratch the above - add items to the string prints using positive indexes starting at the last index of the largest stack (which will be @discs)
+			#for each stack (because stacks that are empty at that location will just print 'nil')
 		@stack1[-1]
 		#call different variables in each row
 		puts str.ljust  lineWidth
