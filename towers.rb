@@ -1,3 +1,5 @@
+require 'pry'
+
 class TowerOfHanoi
 #what we need:
 	#methods: 
@@ -21,15 +23,17 @@ class TowerOfHanoi
 		#if they've won, print a congratulations and exit
 		#if they've quit, print a confirm y/n and exit
 	def initialize(discs = 3)
+		binding.pry
 		@discs = discs
+		@stack1 = Array(1..@discs).reverse  #stack1[0] -> stack1[discs-1] == Bottom -> Top
+		@stack2 = []
+		@stack3 = []
 	end
 
 	#define variables
 	
 
-	@stack1 = Array(@discs.to_i..1)  #L -> R == Bottom -> Top
-	@stack2 = []
-	@stack3 = []
+	
 
 	#define methods
 	def move(from, to)
@@ -39,7 +43,7 @@ class TowerOfHanoi
 	def turn
 		if @stack2 = Array(@discs.to_i..1) || @stack3 = Array(@discs.to_i..1)
 			puts "Congratulations, you won!" 
-			exit  
+			return 
 		end
 	end
 
@@ -54,11 +58,34 @@ class TowerOfHanoi
 
 			#scratch the above - add items to the string prints using positive indexes starting at the last index of the largest stack (which will be @discs)
 			#for each stack (because stacks that are empty at that location will just print 'nil')
-		@stack1[-1]
 		#call different variables in each row
-		puts str.ljust  lineWidth
-		puts str.center lineWidth
-		puts str.rjust  lineWidth
+		binding.pry
+		reversed_stack1 = @stack1.reverse
+		reversed_stack2 = @stack2.reverse
+		reversed_stack3 = @stack3.reverse
+		indices = (Array(1..(@discs)))
+		indices.map! {|x| x * -1}
+		indices = indices.reverse #[-3, -2, -1]
+		indices.each do |index|  #starting at very bottommost possible index, so we need to reverse our stacks here too
+			if reversed_stack1[index].nil?
+				col_1 = ' ' * @discs 
+			else
+				col_1 = 'o' * reversed_stack1[index]
+			end
+			if reversed_stack2[index].nil?
+				col_2 = ' ' * @discs 
+			else
+				col_2 = 'o' * reversed_stack2[index]
+			end
+			if reversed_stack3[index].nil?
+				col_3 = ' ' * @discs 
+			else
+				col_3 = 'o' * reversed_stack3[index]
+			end
+
+			puts col_1.ljust(lineWidth/3) + col_2.center(lineWidth/3) + col_3.rjust(lineWidth/3)
+		end
+		
 	end	
 
 	def play 
@@ -87,6 +114,9 @@ class TowerOfHanoi
 end
 
 
+t = TowerOfHanoi.new(3)
+
+t.play
 
 #write in "procedurally" first
 
