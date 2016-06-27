@@ -22,11 +22,13 @@ class TowerOfHanoi
 		#check whether the player has won or quit
 		#if they've won, print a congratulations and exit
 		#if they've quit, print a confirm y/n and exit
-		def initialize(discs = 3)
-			@discs = discs
-		@stack1 = Array(1..@discs).reverse  #stack1[0] -> stack1[discs-1] == Bottom -> Top
+
+	def initialize(discs = 3)
+		@discs = discs
+		@stack1 = Array(1..@discs).reverse  #stack1.first -> stack1.last == Bottom -> Top
 		@stack2 = []
 		@stack3 = []
+		@answer = Array(1..@discs).reverse
 	end
 
 	#define variables
@@ -38,32 +40,40 @@ class TowerOfHanoi
 	def move(from, to)
 		#if user enters 1, from from stack1, if 2, move from stack 2, etc
 
-
-		
+		#problem: pop deletes our from disc even if the to value is invalid
+		#solution: check validity of input before pop
 		if from == '1' 
-			move_val = @stack1.pop.to_i
+			move_val = @stack1.last.to_i
 		elsif from == '2'
-			move_val = @stack2.pop.to_i
+			move_val = @stack2.last.to_i
 		elsif from == '3' 
-			move_val = @stack3.pop.to_i
-		end
-		
-		
+			move_val = @stack3.last.to_i
+		end	
+
 		if to == '1' 
 			if @stack1.empty? || @stack1[-1] > move_val 
 				@stack1 << move_val 
+				@stack1.pop if from == '1'
+				@stack2.pop if from == '2'
+				@stack3.pop if from == '3'
 			else
 				puts "You cannot place a disk on top of a smaller disc."
 			end
 		elsif to == '2' 
 			if @stack2.empty? || @stack2[-1] > move_val 
 				@stack2 << move_val 
+				@stack1.pop if from == '1'
+				@stack2.pop if from == '2'
+				@stack3.pop if from == '3'
 			else
 				puts "You cannot place a disk on top of a smaller disc."
 			end
 		elsif to == '3' 
 			if @stack3.empty? || @stack3[-1] > move_val 
 				@stack3 << move_val 
+				@stack1.pop if from == '1'
+				@stack2.pop if from == '2'
+				@stack3.pop if from == '3'
 			else
 				puts "You cannot place a disk on top of a smaller disc."
 			end
@@ -71,10 +81,12 @@ class TowerOfHanoi
 
 	end
 
-	def turn
-		if @stack2 == Array(1..@discs.to_i).reverse || @stack3 == Array(1..@discs.to_i).reverse
+	def won?
+		if @stack2 == @answer || @stack3 == @answer
 			puts "Congratulations, you won!" 
-			return 
+			return true 
+		else 
+			return false
 		end
 	end
 
@@ -119,36 +131,37 @@ class TowerOfHanoi
 	end	
 
 	def play 
-		puts "Welcome to Tower of Hanoi!\n
-		Instructions:\n
-		Enter where you'd like to move from and to\n
-		in the format '1,3'. Enter 'q' to quit."
-
+		puts
+		puts "Welcome to Tower of Hanoi!\nInstructions:\nEnter where you'd like to move from and to\nin the format '1,3'. Enter 'q' to quit."
+		puts
 		render
 
 		#get user input and quit or pass it to move call
-		usr_input = gets.chomp
+		
+		until won?
+			usr_input = gets.chomp
 
-		if usr_input == 'q' 
-			puts "Quitter!!"
-			exit
+			if usr_input == 'q' 
+				puts "Better luck next time!"
+				exit
+			end
+
+			from = usr_input.split(',')[0]
+			to = usr_input.split(',')[1]
+			move(from, to)
+
+			render
+			puts
 		end
-
-		from = usr_input.split(',')[0]
-		to = usr_input.split(',')[1]
-		move(from, to)
-
-
-		turn
 	end
 
 
 end
 
 
-t = TowerOfHanoi.new(6)
+#t = TowerOfHanoi.new(3)
 
-t.play
+#t.play
 
-#write in "procedurally" first
+
 
