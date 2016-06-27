@@ -22,9 +22,8 @@ class TowerOfHanoi
 		#check whether the player has won or quit
 		#if they've won, print a congratulations and exit
 		#if they've quit, print a confirm y/n and exit
-	def initialize(discs = 3)
-		binding.pry
-		@discs = discs
+		def initialize(discs = 3)
+			@discs = discs
 		@stack1 = Array(1..@discs).reverse  #stack1[0] -> stack1[discs-1] == Bottom -> Top
 		@stack2 = []
 		@stack3 = []
@@ -37,18 +36,50 @@ class TowerOfHanoi
 
 	#define methods
 	def move(from, to)
-		to << from.pop unless to.last < from.last || from.empty?
+		#if user enters 1, from from stack1, if 2, move from stack 2, etc
+
+
+		
+		if from == '1' 
+			move_val = @stack1.pop.to_i
+		elsif from == '2'
+			move_val = @stack2.pop.to_i
+		elsif from == '3' 
+			move_val = @stack3.pop.to_i
+		end
+		
+		
+		if to == '1' 
+			if @stack1.empty? || @stack1[-1] > move_val 
+				@stack1 << move_val 
+			else
+				puts "You cannot place a disk on top of a smaller disc."
+			end
+		elsif to == '2' 
+			if @stack2.empty? || @stack2[-1] > move_val 
+				@stack2 << move_val 
+			else
+				puts "You cannot place a disk on top of a smaller disc."
+			end
+		elsif to == '3' 
+			if @stack3.empty? || @stack3[-1] > move_val 
+				@stack3 << move_val 
+			else
+				puts "You cannot place a disk on top of a smaller disc."
+			end
+		end
+
 	end
 
 	def turn
-		if @stack2 = Array(@discs.to_i..1) || @stack3 = Array(@discs.to_i..1)
+		if @stack2 == Array(1..@discs.to_i).reverse || @stack3 == Array(1..@discs.to_i).reverse
 			puts "Congratulations, you won!" 
 			return 
 		end
 	end
 
 	def render 
-		lineWidth = 60
+		lineWidth = 40
 		#assign and update variables for each row
 			#create an array from -1 to -@stack1.length
 			#iterate through each value of the array, passing each value as an index to @stack1
@@ -59,7 +90,6 @@ class TowerOfHanoi
 			#scratch the above - add items to the string prints using positive indexes starting at the last index of the largest stack (which will be @discs)
 			#for each stack (because stacks that are empty at that location will just print 'nil')
 		#call different variables in each row
-		binding.pry
 		reversed_stack1 = @stack1.reverse
 		reversed_stack2 = @stack2.reverse
 		reversed_stack3 = @stack3.reverse
@@ -85,7 +115,7 @@ class TowerOfHanoi
 
 			puts col_1.ljust(lineWidth/3) + col_2.center(lineWidth/3) + col_3.rjust(lineWidth/3)
 		end
-		
+		puts "1".ljust(lineWidth/3) + "2".center(lineWidth/3) + "3".rjust(lineWidth/3)	
 	end	
 
 	def play 
@@ -96,16 +126,18 @@ class TowerOfHanoi
 
 		render
 
+		#get user input and quit or pass it to move call
 		usr_input = gets.chomp
 
-		if usr_input == 'quit' 
-			puts "Quitter!"
+		if usr_input == 'q' 
+			puts "Quitter!!"
 			exit
 		end
 
 		from = usr_input.split(',')[0]
 		to = usr_input.split(',')[1]
 		move(from, to)
+
 
 		turn
 	end
@@ -114,7 +146,7 @@ class TowerOfHanoi
 end
 
 
-t = TowerOfHanoi.new(3)
+t = TowerOfHanoi.new(6)
 
 t.play
 
